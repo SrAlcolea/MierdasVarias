@@ -1,0 +1,976 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package Clases;
+
+/**
+ *
+ * @author alcolea
+ */
+public class Gorra implements Comparable<Gorra>{
+
+    private int codi;
+    private String nom;
+    private Tipus tipo ;
+    private String marca;
+    private double talla;
+    private boolean forma;
+    private double precio;
+
+    public Gorra(int codi, String nom, Tipus tipo, String marca, double talla, boolean forma, double precio) {
+        this.codi = codi;
+        this.nom = nom;
+        this.tipo = tipo;
+        this.marca = marca;
+        this.talla = talla;
+        this.forma = forma;
+        this.precio = precio;
+    }
+
+    public int getCodi() {
+        return codi;
+    }
+
+    public void setCodi(int codi) {
+        this.codi = codi;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public Tipus getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(Tipus tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    public double getTalla() {
+        return talla;
+    }
+
+    public void setTalla(double talla) {
+        this.talla = talla;
+    }
+
+    public boolean isForma() {
+        return forma;
+    }
+
+    public void setForma(boolean forma) {
+        this.forma = forma;
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
+    @Override
+    public String toString() {
+        return "Gorra{" + "codi=" + codi + ", nom=" + nom + ", tipo=" + tipo + ", marca=" + marca + ", talla=" + talla + ", forma=" + forma + ", precio=" + precio + '}';
+    }
+
+    @Override
+    public int compareTo(Gorra o) {
+        return this.codi - o.codi;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 73 * hash + this.codi;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Gorra other = (Gorra) obj;
+        return this.codi == other.codi;
+    }
+
+    
+
+}
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package Clases;
+
+import java.util.TreeSet;
+
+/**
+ *
+ * @author alcolea
+ */
+public class Tipus implements Comparable<Tipus>{
+    private int codi;
+    private String nom;
+
+    public Tipus(int codi, String nom) {
+        this.codi = codi;
+        this.nom = nom;
+    }
+
+    public int getCodi() {
+        return codi;
+    }
+
+    public void setCodi(int codi) {
+        this.codi = codi;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    @Override
+    public String toString() {
+        return "Tipus{" + "codi=" + codi + ", nom=" + nom + '}';
+    }
+
+    @Override
+    public int compareTo(Tipus o) {
+        return this.codi - o.codi;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 47 * hash + this.codi;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Tipus other = (Tipus) obj;
+        return this.codi == other.codi;
+    }
+    
+    
+    
+    
+}
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package Clases;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+
+/**
+ *
+ * @author alcolea
+ */
+public class appendObject extends ObjectOutputStream {
+    
+
+
+    appendObject(FileOutputStream fos) throws IOException {
+
+        // Super keyword refers to parent class instance
+        super();
+    }
+
+    // Constructor of this class
+    // 1. Parameterized constructor
+    public appendObject(OutputStream out) throws IOException {
+        super(out);
+    }
+
+    // Method of this class
+    @Override
+    public void writeStreamHeader() throws IOException {
+        return;
+    }
+}
+package Controladores;
+
+import Clases.Gorra;
+import Clases.Tienda;
+import Clases.Tipus;
+import Clases.appendObject;
+import Vista.VistaTienda;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.Set;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
+
+public class ControladorVistaTienda implements ActionListener{
+
+    private VistaTienda tienda;
+    private Tienda shop;
+
+
+    public ControladorVistaTienda() {
+       this.tienda = new VistaTienda(this);
+       this.shop = initTienda();
+       TableModel tm = getGorrasDataTable();
+       tienda.setInfo(tm);
+       this.tienda.setVisible(true);
+       
+       this.tienda.getFiltrar().addActionListener(this);
+       this.tienda.getAgregar().addActionListener(this);
+       this.tienda.getModificar().addActionListener(this);
+       this.tienda.getEliminar().addActionListener(this);
+       
+    }
+    
+    public void serializar(File f, Gorra gorr){
+        try {
+            FileOutputStream fos = new FileOutputStream(f, true);
+            if (f.length() == 0) {
+                    ObjectOutputStream oos
+                        = new ObjectOutputStream(fos);
+                    oos.writeObject(gorr);
+                    oos.close();
+                }
+ 
+                // There is content in file to be write on
+                else {
+ 
+                    appendObject oos = null;
+                    oos = new appendObject(fos);
+                    oos.writeObject(gorr);
+ 
+                    // Closing the FileOutputStream object
+                    // to release memory resources
+                    oos.close();
+                }
+        } catch (IOException e) {
+
+            System.out.println(e);
+        }
+        
+    }
+
+
+    private TableModel getGorrasDataTable() {
+        DefaultTableModel tm = new DefaultTableModel();
+        tm.addColumn("Codi");
+        tm.addColumn("Nom");
+        tm.addColumn("Tipo");
+        tm.addColumn("Marca");
+        tm.addColumn("Talla");
+        tm.addColumn("Forma");
+        tm.addColumn("Precio");
+        
+        Set<Gorra> gorras = shop.getGorras();
+        for (Gorra gorr : gorras) {
+            Object[] fila = new Object[7]; // Hay tres columnas en la tabla
+            // Se rellena cada posición del array con una atributo de Alumne.
+            fila[0] = gorr.getCodi();
+            fila[1] = gorr.getNom();
+            fila[2] = gorr.getTipo().getNom();
+            fila[3] = gorr.getMarca();
+            fila[4] = gorr.getTalla();
+            fila[5] = gorr.isForma();
+            fila[6] = gorr.getPrecio();
+
+            // Se añade al modelo la fila completa.     
+            tm.addRow(fila);
+        }
+        return tm;
+    }
+    
+    
+    public Tienda initTienda() {
+        Tienda ti = new Tienda("Alcolea's INC");
+        
+        Tipus t1 = new Tipus(1,"59FIFTY");
+        Tipus t2 = new Tipus(2,"39THIRTY");
+        
+        
+        
+        Gorra gorr1 = new Gorra(1, "peruano",t1,"new era", 7.2, false,50);
+        Gorra gorr2 = new Gorra(2, "peruano",t2,"new era", 7.5, true,50);
+        Gorra gorr3 = new Gorra(3,"peruano",t1,"new era", 7.8, false,50);
+        Gorra gorr4 = new Gorra(4, "peruano",t2,"new era", 7.0, true,50);
+        Gorra gorr5 = new Gorra(5, "peruano",t1,"new era", 7.25, false,50);
+        Gorra gorr6 = new Gorra(6, "peruano",t2,"new era", 6.0, true,50);
+        Gorra gorr7 = new Gorra(7, "peruano",t1,"new era", 8.0, false,50);
+
+        ti.agregarGorra(gorr1);
+        ti.agregarGorra(gorr2);
+        ti.agregarGorra(gorr3);
+        ti.agregarGorra(gorr4);
+        ti.agregarGorra(gorr5);
+        ti.agregarGorra(gorr6);
+        ti.agregarGorra(gorr7);
+        return ti;
+
+    }
+    
+    public void agregarGorra(Gorra gr){
+        shop.agregarGorra(gr);
+    }
+
+   public void mostrarFormulari(){
+        ControladorFormulario frm = new ControladorFormulario(tienda, shop);
+        TableModel tm = getGorrasDataTable();
+        tienda.setInfo(tm);
+    }
+    
+    
+    @Override
+    public void actionPerformed(ActionEvent e) {
+            
+        
+    }
+
+    
+}
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package Controladores;
+
+import Clases.Tienda;
+import Vista.Formulario;
+import Vista.VistaTienda;
+
+/**
+ *
+ * @author alcolea
+ */
+public class ControladorFormulario {
+
+    private Formulario formulari;
+    private VistaTienda vt;
+    private Tienda shop;
+
+    public ControladorFormulario(VistaTienda vt, Tienda shop) {
+        this.formulari = new Formulario(vt, true, this);
+        this.formulari.setVisible(true);
+        this.shop = shop;
+    }
+
+}
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package Clases;
+
+import java.util.Set;
+import java.util.TreeSet;
+
+/**
+ *
+ * @author alcolea
+ */
+public class Tienda {
+
+    private String nom;
+    TreeSet<Gorra> gorras = new TreeSet<Gorra>();
+    TreeSet<Tipus> tipos = new TreeSet<Tipus>();
+
+    public Tienda(String nom) {
+        this.nom = nom;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public Set<Gorra> getGorras() {
+        return gorras;
+    }
+
+
+    public void setGorras(TreeSet<Gorra> gorras) {
+        this.gorras = gorras;
+    }
+
+    public TreeSet<Tipus> getTipos() {
+        return tipos;
+    }
+
+    public void setTipos(TreeSet<Tipus> tipos) {
+        this.tipos = tipos;
+    }
+
+    public void agregarGorra(Gorra gorra) {
+        gorras.add(gorra);
+    }
+
+    public void agregarTipo(Tipus tipo) {
+        tipos.add(tipo);
+    }
+
+    public void eliminarGorra(Gorra gorra) {
+        gorras.remove(gorra);
+    }
+
+    public void eliminarTipo(Tipus tipo) {
+        tipos.remove(tipo);
+    }
+
+    @Override
+    public String toString() {
+        return "Tienda{" + "nom=" + nom + ", gorras=" + gorras + ", tipos=" + tipos + '}';
+    }
+
+}
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package Principal;
+
+import Controladores.ControladorVistaTienda;
+
+/**
+ *
+ * @author alcolea
+ */
+public class Main {
+    public static void main(String args[]) {
+    ControladorVistaTienda cont = new ControladorVistaTienda();
+}
+}/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package Vista;
+
+import Clases.Gorra;
+import Controladores.ControladorVistaTienda;
+import java.util.List;
+import java.util.Set;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
+/**
+ *
+ * @author alcolea
+ */
+public class VistaTienda extends javax.swing.JFrame {
+
+    /**
+     * Creates new form Tienda
+     */
+    private ControladorVistaTienda cont;
+
+    public VistaTienda(ControladorVistaTienda cont) {
+
+        this.cont = cont;
+
+        initComponents();
+//        lCodiError.setVisible(false);
+    }
+
+    public void setInfo(TableModel tm) {
+        tabla.setModel(tm);
+    }
+
+    public void actualizarTabla(Gorra gorra) {
+        DefaultTableModel model = (DefaultTableModel) tabla.getModel();
+        model.setRowCount(0);
+//        model.addRow(new Object[]{gorra.getCodi(), gorra.getNom(), gorra.getTipo(), gorra.getMarca(), gorra.getTalla(), gorra.isForma() ,gorra.getPrecio()});
+
+        Object[] fila = {gorra.getCodi(), gorra.getNom(), gorra.getTipo(), gorra.getMarca(), gorra.getTalla(), gorra.isForma(), gorra.getPrecio()};
+        model.addRow(fila);
+    
+    }
+
+    public JButton getAgregar() {
+        return Agregar;
+    }
+
+    public void setAgregar(JButton Agregar) {
+        this.Agregar = Agregar;
+    }
+
+    public JButton getEliminar() {
+        return Eliminar;
+    }
+
+    public void setEliminar(JButton Eliminar) {
+        this.Eliminar = Eliminar;
+    }
+
+    public JComboBox<String> getFiltrar() {
+        return Filtrar;
+    }
+
+    public void setFiltrar(JComboBox<String> Filtrar) {
+        this.Filtrar = Filtrar;
+    }
+
+    public JButton getModificar() {
+        return Modificar;
+    }
+
+    public void setModificar(JButton Modificar) {
+        this.Modificar = Modificar;
+    }
+
+    
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    private void initComponents() {
+
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabla = new javax.swing.JTable();
+        Agregar = new javax.swing.JButton();
+        Eliminar = new javax.swing.JButton();
+        Modificar = new javax.swing.JButton();
+        Filtrar = new javax.swing.JComboBox<>();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Software");
+
+        tabla.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tabla);
+
+        Agregar.setText("Agregar");
+        Agregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AgregarActionPerformed(evt);
+            }
+        });
+
+        Eliminar.setText("Eliminar");
+
+        Modificar.setText("Modificar");
+
+        Filtrar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        Filtrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                FiltrarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(136, Short.MAX_VALUE)
+                .addComponent(Agregar)
+                .addGap(74, 74, 74)
+                .addComponent(Modificar)
+                .addGap(80, 80, 80)
+                .addComponent(Eliminar)
+                .addGap(118, 118, 118))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(Filtrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(Filtrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Agregar)
+                    .addComponent(Eliminar)
+                    .addComponent(Modificar))
+                .addContainerGap(56, Short.MAX_VALUE))
+        );
+
+        pack();
+    }// </editor-fold>                        
+
+    private void FiltrarActionPerformed(java.awt.event.ActionEvent evt) {                                        
+        // TODO add your handling code here:
+    }                                       
+
+    private void AgregarActionPerformed(java.awt.event.ActionEvent evt) {                                        
+        cont.mostrarFormulari();
+    }                                       
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(VistaTienda.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(VistaTienda.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(VistaTienda.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(VistaTienda.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new VistaTienda(null).setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify                     
+    private javax.swing.JButton Agregar;
+    private javax.swing.JButton Eliminar;
+    private javax.swing.JComboBox<String> Filtrar;
+    private javax.swing.JButton Modificar;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tabla;
+    // End of variables declaration                   
+
+}
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
+ */
+package Vista;
+
+import Clases.Gorra;
+import Clases.Tipus;
+import Controladores.ControladorFormulario;
+import Controladores.ControladorVistaTienda;
+
+/**
+ *
+ * @author alcolea
+ */
+public class Formulario extends javax.swing.JDialog {
+
+    /**
+     * Creates new form Formulario
+     */
+    private ControladorFormulario cf;
+    public Formulario(java.awt.Frame parent, boolean modal, ControladorFormulario cf) {
+        super(parent, modal);
+        this.cf = cf;
+        initComponents();
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    private void initComponents() {
+
+        jLabel7 = new javax.swing.JLabel();
+        jTextField6 = new javax.swing.JTextField();
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        jLabel1 = new javax.swing.JLabel();
+        txtCodi = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        boxTipo = new javax.swing.JComboBox<>();
+        txtTalla = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        txtMarca = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        forma1 = new javax.swing.JRadioButton();
+        forma2 = new javax.swing.JRadioButton();
+        jLabel8 = new javax.swing.JLabel();
+        txtNom = new javax.swing.JTextField();
+        txtPrecio = new javax.swing.JTextField();
+        Save = new javax.swing.JButton();
+
+        jLabel7.setText("jLabel7");
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Formulario");
+
+        jLabel1.setText("Codi:");
+
+        jLabel2.setText("Nom:");
+
+        jLabel3.setText("Tipo:");
+
+        jLabel4.setText("Marca:");
+
+        boxTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "59FIFTY", "39THIRTY" }));
+
+        jLabel5.setText("Talla:");
+
+        jLabel6.setText("Forma:");
+
+        buttonGroup1.add(forma1);
+        forma1.setText("Talla unica");
+        forma1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                forma1ActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(forma2);
+        forma2.setText("Talla regulable");
+        forma2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                forma2ActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setText("Precio:");
+
+        Save.setBackground(new java.awt.Color(204, 204, 204));
+        Save.setText("Save");
+        Save.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SaveActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel1))
+                        .addGap(33, 33, 33)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(boxTipo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtCodi, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtTalla, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtMarca, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtNom, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 5, Short.MAX_VALUE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel8))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(forma1))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(forma2)
+                .addContainerGap(40, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Save)
+                .addGap(50, 50, 50))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtCodi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtNom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(boxTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(33, 33, 33)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(txtMarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(txtTalla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(forma1)
+                    .addComponent(forma2))
+                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addComponent(Save)
+                .addGap(21, 21, 21))
+        );
+
+        pack();
+    }// </editor-fold>                        
+
+    private void forma1ActionPerformed(java.awt.event.ActionEvent evt) {                                       
+        // TODO add your handling code here:
+    }                                      
+
+    private void forma2ActionPerformed(java.awt.event.ActionEvent evt) {                                       
+        // TODO add your handling code here:
+    }                                      
+
+    private void SaveActionPerformed(java.awt.event.ActionEvent evt) {                                     
+        // TODO add your handling code here:
+        String nom = (String)boxTipo.getSelectedItem();
+        int codi = boxTipo.getSelectedIndex();
+        Tipus tipo = new Tipus(codi, nom);
+        
+        Gorra gorra = new Gorra(Integer.parseInt(txtCodi.getText()), txtNom.getText(), tipo, txtMarca.getText(), Double.parseDouble(txtTalla.getText()), forma1.isSelected(), Double.parseDouble(txtPrecio.getText()));
+        ControladorVistaTienda controlador = new ControladorVistaTienda();
+        controlador.agregarGorra(gorra);
+        dispose();
+    }                                    
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Formulario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Formulario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Formulario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Formulario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the dialog */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                Formulario dialog = new Formulario(new javax.swing.JFrame(), true,null);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify                     
+    private javax.swing.JButton Save;
+    private javax.swing.JComboBox<String> boxTipo;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JRadioButton forma1;
+    private javax.swing.JRadioButton forma2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JTextField jTextField6;
+    private javax.swing.JTextField txtCodi;
+    private javax.swing.JTextField txtMarca;
+    private javax.swing.JTextField txtNom;
+    private javax.swing.JTextField txtPrecio;
+    private javax.swing.JTextField txtTalla;
+    // End of variables declaration                   
+}
+
