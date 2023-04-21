@@ -237,6 +237,7 @@ public class ControladorVistaTienda {
     
 }
 
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -253,6 +254,8 @@ import java.io.OutputStream;
  * @author alcolea
  */
 public class appendObject extends ObjectOutputStream {
+    
+
 
     appendObject(FileOutputStream fos) throws IOException {
 
@@ -262,8 +265,8 @@ public class appendObject extends ObjectOutputStream {
 
     // Constructor of this class
     // 1. Parameterized constructor
-    appendObject(OutputStream o) throws IOException {
-        super(o);
+    public appendObject(OutputStream out) throws IOException {
+        super(out);
     }
 
     // Method of this class
