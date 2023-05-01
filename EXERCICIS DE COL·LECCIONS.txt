@@ -1,0 +1,53 @@
+1) Fes una classe genèrica Pila que tingui tres mètodes: pop, push i empty, utilitzant la classe
+LinkedList. Fes un main per provar la funcionalitat de la pila instanciant-la amb dos tipus
+d’objectes diferents.
+
+
+2) Fes una classe genèrica Cua que tingui tres mètodes: add, get i empty, utilitzant la classe
+LinkedList. Fes un main per provar la funcionalitat de la cua instanciant-la amb dos tipus
+d’objectes diferents.
+
+
+3) Fes una classe Impressora utilitzant la classe Cua genèrica. La impressora ha de tenir mètodes
+per afegir Documents (que serà una classe), imprimir-los i saber si la cua està buida. Fes un
+main per provar la funcionalitat afegint Documents per a imprimir a la impressora i imprimir-los
+mentre la cua de l impressora no estigui buida.
+
+
+4) Suposa que volem crear un programa per simular un peatge d'una autopista. Suposem que
+tenim 5 "caixes" per pagar el peatge. Un cotxe quan arriba al peatge anirà a aquella caixa que hi
+ha menys cotxes. Si diferents caixes tenen aquest mínim número de cotxes anirà indistintament
+a qualsevol d'aquestes. Crea una classe Peatge amb la col·lecció adient per simular aquesta
+situació. Fes que aquesta classe a part dels atributs i mètodes habituals tingui un mètode
+entraCotxe i un altre surtCotxe.
+
+
+5) Fes una classe Curs que tingui un HashSet d'alumnes. Aquests alumnes a més del nom i dni
+(que no pot estar duplicat) guardaran la seva nota final de Curs. Fes que aquesta Classe curs
+tingui, a més dels mètodes habituals (afegir, esborrar per dni i mostrar la llista d’alumnes), un
+mètode per mostrar tots els alumnes ordenats per dni .
+
+
+6) Fes una classe Empresa que tingui un TreeSet de treballadors (atributs: nom, cognoms i sou).
+No poden existir treballadors amb el mateix nom i cognoms. A més dels mètodes habituals ha
+de mostrar el llistat de treballadors ordenats primer per cognom i després per nom.
+
+
+7) Fes una classe Diccionari utilitzant la classe HashMap, on puguem afegit i esborrar paraules i
+llistar-les:
+Fes que la clau sigui un String i el valor sigui una classe Paraula amb atributs: definició, idioma
+i tipus de paraula (substantiu, verb, adjectiu, preposició,...)
+
+
+8) Fes una classe “Agenda de contactes” utilitzant la col·lecció de Java adient. Més
+concretament cada contacte constarà de quatre Strings: nom, adreça, població i telèfon.
+L'Agenda haurà de contenir mètodes per: mostrar les dades d'un contacte donat el nom, afegir
+un contacte, eliminar un contacte, mostrar els contactes ordenats per nom, mostrar tots els
+contactes que tenen un nom que comenci amb una lletra passada per paràmetre, mostrar tots els
+contactes que viuen en una població que comença per un string determinat (“Sant” o San”...).
+
+
+9) En un supermercat els clients apilen els productes en carros. Un cop han agafat tot allò que
+volen comprar van a una de les 5 caixes que té el supermercat, aquella que en aquell moment té
+menys clients. Cada caixa guarda la quantitat recaptada diària. Simula la situació creant classes i
+utilitzant les col·leccions adients.
